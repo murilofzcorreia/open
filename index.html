@@ -2029,7 +2029,7 @@ let musicEnabled = false;
 function updateMusicUI(){
   musicEnabled = !bgMusic.paused && !bgMusic.ended;
   musicToggle.classList.toggle('on', musicEnabled);
-  musicState.textContent = musicEnabled ? 'nossa música tocando' : 'vinil pausado';
+  musicState.textContent = musicEnabled ? 'vinil tocando' : 'vinil pausado';
   musicHint.textContent = musicEnabled ? 'toque para desligar' : 'toque para ligar';
 }
 
