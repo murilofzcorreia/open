@@ -1883,7 +1883,7 @@ body::after{
 </audio>
 
 <nav class="site-nav" id="site-nav" aria-label="Selecionar página">
-  <button class="site-nav-btn active" type="button" data-page="page-yes">Pedido</button>
+  <button class="site-nav-btn active" type="button" data-page="page-proposal-intro">Pedido</button>
   <button class="site-nav-btn" type="button" data-page="page-history">Nossa história</button>
 </nav>
 
@@ -1904,10 +1904,36 @@ body::after{
     Um lugar para guardar o pedido, as lembranças e o tempo bonito que começou entre nós.
   </p>
   <div class="hub-actions" aria-label="Escolher caminho">
-    <button class="hub-btn primary" type="button" onclick="transitionTo('page-question')">Pedido</button>
+    <button class="hub-btn primary" type="button" onclick="transitionTo('page-proposal-intro')">Pedido</button>
     <button class="hub-btn" type="button" onclick="transitionTo('page-history')">Nossa história</button>
   </div>
   <p class="hub-footnote">escolha por onde quer começar</p>
+</div>
+
+<!-- ══════════════════════════════
+     PAGE 1.5 — ENTRADA DO PEDIDO
+══════════════════════════════ -->
+<div id="page-proposal-intro" class="page">
+  <p class="intro-pre">uma mensagem especial para</p>
+  <div class="intro-title-wrap" data-text="Ana Paula&#10;Germano de Oliveira">
+    <h1 class="intro-title">
+      <span class="t1">Ana Paula</span>
+      <span class="t2">Germano de Oliveira</span>
+    </h1>
+  </div>
+  <div class="intro-line"></div>
+  <p class="intro-sub">
+    Minha <strong>princesa</strong>, antes de abrir,<br>
+    saiba que cada palavra aqui<br>veio do coração. 💜
+  </p>
+  <div class="intro-btn-wrap">
+    <button class="intro-btn" id="open-btn">
+      <div class="btn-glow"></div>
+      <div class="btn-inner-ring"></div>
+      <span class="intro-btn-core" aria-hidden="true"></span>
+    </button>
+    <span class="intro-btn-label">pressione e segure para sentir meu coração</span>
+  </div>
 </div>
 
 <!-- ══════════════════════════════
@@ -2392,7 +2418,7 @@ document.head.appendChild(ripStyle);
 const overlay = document.getElementById('trans-overlay');
 const siteNav = document.getElementById('site-nav');
 const siteNavButtons = document.querySelectorAll('.site-nav-btn');
-const pagesWithNav = ['page-yes', 'page-history'];
+const pagesWithNav = ['page-proposal-intro', 'page-yes', 'page-history'];
 const RELATIONSHIP_START = '2026-05-12T20:25:00-03:00';
 const RELATIONSHIP_TIME_ZONE = 'America/Sao_Paulo';
 let counterTimer = null;
@@ -2411,6 +2437,7 @@ function showPage(id){
   pg.classList.add('active');
   syncMusicTogglePlacement(id);
   syncSiteNav(id);
+  if(id === 'page-proposal-intro' && typeof resetHoldButton === 'function') resetHoldButton();
   if(id === 'page-history') updateRelationshipCounter();
   else clearInterval(counterTimer);
   window.scrollTo(0,0);
@@ -2590,6 +2617,20 @@ let noEsc=0; const MAX=7;
 const btnNo = document.getElementById('btn-no');
 const noAway = document.getElementById('no-away');
 
+function resetQuestionState(){
+  noEsc = 0;
+  const ph=document.getElementById('btn-no-placeholder');
+  if(ph) ph.classList.remove('gone');
+  if(noAway){
+    noAway.classList.remove('show');
+    noAway.innerHTML = '';
+  }
+  if(btnNo){
+    btnNo.style.display = '';
+    btnNo.classList.remove('bye');
+  }
+}
+
 function positionNoButton(){
   const ph=document.getElementById('btn-no-placeholder');
   const r=ph.getBoundingClientRect();
@@ -2607,6 +2648,7 @@ function positionNoButton(){
 const _origShow = showPage;
 const origTransTo = transitionTo;
 function transitionTo2(id){
+  if(id==='page-question') resetQuestionState();
   origTransTo(id);
   if(id==='page-question') setTimeout(positionNoButton, 500);
 }
@@ -2617,6 +2659,14 @@ let holdTimer = null;
 let holdProgress = 0;
 const openBtn = document.getElementById('open-btn');
 const btnGlow = openBtn ? openBtn.querySelector('.btn-glow') : null;
+
+function resetHoldButton(){
+  holdProgress = 0;
+  cancelAnimationFrame(holdTimer);
+  if(!btnGlow) return;
+  btnGlow.style.transform = '';
+  btnGlow.style.opacity = '';
+}
 
 function startHold(e) {
   if(!openBtn || !btnGlow) return;
