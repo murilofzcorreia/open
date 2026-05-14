@@ -141,6 +141,85 @@ body{
 }
 .intro-sub strong{color:var(--pink);}
 
+.hub-names{
+  width:min(720px, calc(100vw - 34px));
+  margin:22px auto 0;
+  opacity:0;
+  animation:slideUp 0.8s ease 1.14s forwards;
+}
+.hub-couple{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.35rem,8vw,5.1rem);
+  font-weight:300;
+  line-height:0.9;
+  color:#f7ecff;
+  text-align:center;
+  text-shadow:0 0 34px rgba(244,114,182,0.16);
+}
+.hub-couple span{
+  display:block;
+}
+.hub-amp{
+  margin:8px auto 7px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.5rem,5vw,3.2rem);
+  font-style:italic;
+  color:var(--pink);
+  text-align:center;
+}
+.hub-copy{
+  max-width:430px;
+  margin:20px auto 0;
+  font-size:0.82rem;
+  font-weight:300;
+  line-height:1.9;
+  color:var(--p5);
+  text-align:center;
+  opacity:0;
+  animation:slideUp 0.8s ease 1.28s forwards;
+}
+.hub-actions{
+  display:flex;
+  justify-content:center;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-top:34px;
+  opacity:0;animation:slideUp 0.8s ease 1.5s forwards;
+}
+.hub-btn{
+  min-width:204px;
+  padding:16px 22px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.14);
+  background:rgba(255,255,255,0.055);
+  color:#fff;
+  font-family:'Montserrat',sans-serif;
+  font-size:0.62rem;
+  font-weight:600;
+  letter-spacing:2.8px;
+  text-transform:uppercase;
+  cursor:pointer;
+  box-shadow:0 14px 34px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.06);
+  transition:transform 0.32s cubic-bezier(0.22,1,0.36,1), border-color 0.32s ease, background 0.32s ease;
+}
+.hub-btn.primary{
+  border-color:rgba(244,114,182,0.34);
+  background:linear-gradient(135deg, rgba(244,114,182,0.24), rgba(168,85,247,0.22));
+}
+.hub-btn:hover{
+  transform:translateY(-3px);
+  border-color:rgba(244,114,182,0.58);
+}
+.hub-footnote{
+  margin-top:24px;
+  font-size:0.5rem;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  color:rgba(216,180,254,0.58);
+  text-align:center;
+  opacity:0;
+  animation:fadeIn 0.8s ease 1.75s forwards;
+}
 .intro-btn-wrap{
   margin-top:44px;
   opacity:0;animation:slideUp 0.8s ease 1.5s forwards;
@@ -1611,6 +1690,24 @@ body::after{
     font-size:0.56rem;
     letter-spacing:1.5px;
   }
+  .hub-names{
+    margin-top:18px;
+  }
+  .hub-couple{
+    font-size:clamp(2.1rem,12vw,3.6rem);
+  }
+  .hub-actions{
+    width:100%;
+    gap:10px;
+    margin-top:26px;
+  }
+  .hub-btn{
+    width:min(286px, 100%);
+    min-width:0;
+    padding:15px 18px;
+    font-size:0.56rem;
+    letter-spacing:2px;
+  }
   #page-history{
     padding:74px 16px 62px;
   }
@@ -1794,26 +1891,23 @@ body::after{
      PAGE 1 — INTRO
 ══════════════════════════════ -->
 <div id="page-intro" class="page active">
-  <p class="intro-pre">uma mensagem especial para</p>
-  <div class="intro-title-wrap" data-text="Ana Paula&#10;Germano de Oliveira">
-    <h1 class="intro-title">
-      <span class="t1">Ana Paula</span>
-      <span class="t2">Germano de Oliveira</span>
+  <p class="intro-pre">Murilo Fuzi Correia e Ana Paula Germano de Oliveira</p>
+  <div class="hub-names">
+    <h1 class="hub-couple">
+      <span>Murilo Fuzi Correia</span>
+      <em class="hub-amp">&amp;</em>
+      <span>Ana Paula Germano de Oliveira</span>
     </h1>
   </div>
   <div class="intro-line"></div>
-  <p class="intro-sub">
-    Minha <strong>princesa</strong>, antes de abrir,<br>
-    saiba que cada palavra aqui<br>veio do coração. 💜
+  <p class="hub-copy">
+    Um lugar para guardar o pedido, as lembranças e o tempo bonito que começou entre nós.
   </p>
-  <div class="intro-btn-wrap">
-    <button class="intro-btn" id="open-btn">
-      <div class="btn-glow"></div>
-      <div class="btn-inner-ring"></div>
-      <span class="intro-btn-core" aria-hidden="true"></span>
-    </button>
-    <span class="intro-btn-label">pressione e segure para sentir meu coração</span>
+  <div class="hub-actions" aria-label="Escolher caminho">
+    <button class="hub-btn primary" type="button" onclick="transitionTo('page-question')">Pedido</button>
+    <button class="hub-btn" type="button" onclick="transitionTo('page-history')">Nossa história</button>
   </div>
+  <p class="hub-footnote">escolha por onde quer começar</p>
 </div>
 
 <!-- ══════════════════════════════
@@ -1902,7 +1996,7 @@ body::after{
       </p>
     </section>
 
-    <section class="love-counter" aria-label="Contador do namoro">
+    <section class="love-counter" data-love-counter aria-label="Contador do namoro">
       <div class="counter-head">
         <div>
           <p class="counter-label">desde o pedido de namoro</p>
@@ -2339,6 +2433,7 @@ siteNavButtons.forEach(btn=>{
 });
 
 function updateRelationshipCounter(){
+  const counterScopes = document.querySelectorAll('[data-love-counter]');
   const yearsEl = document.getElementById('counter-years');
   const monthsEl = document.getElementById('counter-months');
   const daysEl = document.getElementById('counter-days');
@@ -2347,16 +2442,20 @@ function updateRelationshipCounter(){
   const secondsEl = document.getElementById('counter-seconds');
   const dateLabel = document.getElementById('counter-date-label');
   const note = document.getElementById('counter-note');
-  if(!yearsEl || !monthsEl || !daysEl || !hoursEl || !minutesEl || !secondsEl) return;
+  if(!counterScopes.length && (!yearsEl || !monthsEl || !daysEl || !hoursEl || !minutesEl || !secondsEl)) return;
   clearInterval(counterTimer);
 
+  function setCounterText(part, value){
+    const text = String(value);
+    document.querySelectorAll(`[data-counter-part="${part}"]`).forEach(el=>{
+      el.textContent = text;
+    });
+    const legacyEl = document.getElementById(`counter-${part}`);
+    if(legacyEl) legacyEl.textContent = text;
+  }
+
   if(!RELATIONSHIP_START){
-    yearsEl.textContent = '--';
-    monthsEl.textContent = '--';
-    daysEl.textContent = '--';
-    hoursEl.textContent = '--';
-    minutesEl.textContent = '--';
-    secondsEl.textContent = '--';
+    ['years', 'months', 'days', 'hours', 'minutes', 'seconds'].forEach(part=>setCounterText(part, '--'));
     return;
   }
 
@@ -2453,12 +2552,12 @@ function updateRelationshipCounter(){
 
   function tick(){
     const parts = getElapsedParts(start, new Date());
-    yearsEl.textContent = String(parts.years);
-    monthsEl.textContent = String(parts.months);
-    daysEl.textContent = String(parts.days);
-    hoursEl.textContent = String(parts.hours).padStart(2, '0');
-    minutesEl.textContent = String(parts.minutes).padStart(2, '0');
-    secondsEl.textContent = String(parts.seconds).padStart(2, '0');
+    setCounterText('years', parts.years);
+    setCounterText('months', parts.months);
+    setCounterText('days', parts.days);
+    setCounterText('hours', String(parts.hours).padStart(2, '0'));
+    setCounterText('minutes', String(parts.minutes).padStart(2, '0'));
+    setCounterText('seconds', String(parts.seconds).padStart(2, '0'));
   }
   tick();
   counterTimer = setInterval(tick, 1000);
@@ -2517,9 +2616,10 @@ window.transitionTo = transitionTo2;
 let holdTimer = null;
 let holdProgress = 0;
 const openBtn = document.getElementById('open-btn');
-const btnGlow = openBtn.querySelector('.btn-glow');
+const btnGlow = openBtn ? openBtn.querySelector('.btn-glow') : null;
 
 function startHold(e) {
+  if(!openBtn || !btnGlow) return;
   if(e) e.preventDefault();
   if(bgMusic.readyState === 0) bgMusic.load();
   startMusic();
@@ -2541,6 +2641,7 @@ function startHold(e) {
   updateHold();
 }
 function stopHold(e) {
+  if(!openBtn || !btnGlow) return;
   if(e) e.preventDefault();
   cancelAnimationFrame(holdTimer);
   if(holdProgress >= 100) return;
@@ -2548,14 +2649,16 @@ function stopHold(e) {
   btnGlow.style.transform = '';
   btnGlow.style.opacity = '';
 }
-openBtn.addEventListener('pointerdown', startHold);
-openBtn.addEventListener('pointerup', stopHold);
-openBtn.addEventListener('pointerleave', stopHold);
-openBtn.addEventListener('pointercancel', stopHold);
-openBtn.addEventListener('contextmenu', (e)=> e.preventDefault());
-openBtn.addEventListener('touchstart', startHold, { passive:false });
-openBtn.addEventListener('touchend', stopHold, { passive:false });
-openBtn.addEventListener('touchcancel', stopHold, { passive:false });
+if(openBtn){
+  openBtn.addEventListener('pointerdown', startHold);
+  openBtn.addEventListener('pointerup', stopHold);
+  openBtn.addEventListener('pointerleave', stopHold);
+  openBtn.addEventListener('pointercancel', stopHold);
+  openBtn.addEventListener('contextmenu', (e)=> e.preventDefault());
+  openBtn.addEventListener('touchstart', startHold, { passive:false });
+  openBtn.addEventListener('touchend', stopHold, { passive:false });
+  openBtn.addEventListener('touchcancel', stopHold, { passive:false });
+}
 
 /* ══════════════════════════════════════════════
    MUSIC
