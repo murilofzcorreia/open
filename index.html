@@ -6,6 +6,8 @@
   <meta name="theme-color" content="#1a0038"/>
   <title>Ana Paula Germano de Oliveira</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='50%25' y='54%25' text-anchor='middle' dominant-baseline='middle' font-size='52'%3E%F0%9F%92%9C%3C/text%3E%3C/svg%3E"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
 :root {
@@ -572,6 +574,8 @@ body{
   box-shadow:0 16px 42px rgba(0,0,0,0.42), inset 0 0 20px rgba(255,255,255,0.03);
   transform:translateY(40px) scale(0.95);opacity:0;
   transition:all 0.8s cubic-bezier(0.16,1,0.3,1);
+  will-change:transform,opacity;
+  contain:layout style paint;
 }
 .g-card.full-width{
   grid-column: 1 / span 2;
@@ -1883,7 +1887,7 @@ body::after{
     <span class="music-hint">toque para ligar</span>
   </span>
 </button>
-<audio id="bg-music" loop preload="auto" playsinline>
+<audio id="bg-music" loop preload="metadata" playsinline>
   <source src="LSmusica.mp3" type="audio/mpeg">
 </audio>
 
@@ -1987,18 +1991,10 @@ body::after{
   <p class="photos-eyebrow">nossos primeiros registros</p>
   <p class="photos-eyebrow">✦ rodeio ✦</p>
     <div class="gallery" id="gallery">
-    <div class="g-card full-width"><img src="imagensParaADD/foto_1.jpeg" alt="Nossos momentos 1"><div class="g-overlay"></div></div>
-    <div class="g-card"><img src="imagensParaADD/foto_2.jpeg" alt="Nossos momentos 2"><div class="g-overlay"></div></div>
-    <div class="g-card"><img src="imagensParaADD/foto_3.jpeg" alt="Nossos momentos 3"><div class="g-overlay"></div></div>
-    <div class="g-card full-width"><img src="imagensParaADD/foto_4.jpeg" alt="Nossos momentos 4"><div class="g-overlay"></div></div>
-    <div class="g-card"><img src="imagensParaADD/foto_5.jpeg" alt="Nossos momentos 5"><div class="g-overlay"></div></div>
-    <div class="g-card"><img src="imagensParaADD/foto_6.jpeg" alt="Nossos momentos 6"><div class="g-overlay"></div></div>
-    <div class="g-card"><img src="imagensParaADD/foto_7.jpeg" alt="Nossos momentos 7"><div class="g-overlay"></div></div>
-    <div class="g-card"><img src="imagensParaADD/foto_8.jpeg" alt="Nossos momentos 8"><div class="g-overlay"></div></div>
-    <div class="g-card full-width"><img src="imagensParaADD/foto_9.jpeg" alt="Nossos momentos 9"><div class="g-overlay"></div></div>
-    <div class="g-card"><img src="imagensParaADD/foto_10.jpeg" alt="Nossos momentos 10"><div class="g-overlay"></div></div>
-    <div class="g-card"><img src="imagensParaADD/foto_11.jpeg" alt="Nossos momentos 11"><div class="g-overlay"></div></div>
-    <div class="g-card full-width"><img src="imagensParaADD/foto_12.jpeg" alt="Nossos momentos 12"><div class="g-overlay"></div></div>
+    <div class="g-card full-width"><img src="imagensParaADD/foto_1.jpeg" alt="Nossos momentos 1" loading="lazy" width="600" height="220"><div class="g-overlay"></div></div>
+    <div class="g-card"><img src="imagensParaADD/foto_2.jpeg" alt="Nossos momentos 2" loading="lazy" width="300" height="190"><div class="g-overlay"></div></div>
+    <div class="g-card"><img src="imagensParaADD/foto_3.jpeg" alt="Nossos momentos 3" loading="lazy" width="300" height="190"><div class="g-overlay"></div></div>
+    <div class="g-card full-width"><img src="imagensParaADD/foto_4.jpeg" alt="Nossos momentos 4" loading="lazy" width="600" height="220"><div class="g-overlay"></div></div>
   </div>
   <div class="signature">
     <p>Com amor,<br><strong>Murilo Fuzi Correia</strong></p>
@@ -2346,7 +2342,14 @@ body::after{
   resize();
   window.addEventListener('resize', resize);
 
+  let _particlesPaused = false;
+  document.addEventListener('visibilitychange', () => {
+    _particlesPaused = document.hidden;
+    if(!_particlesPaused) requestAnimationFrame(loop);
+  });
+
   function loop(t){
+    if(_particlesPaused) return;
     gl.uniform2f(uRes, canvas.width, canvas.height);
     gl.uniform1f(uTime, t*0.001);
     gl.uniform2f(uMouse, mouseX, mouseY);
