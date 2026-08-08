@@ -441,9 +441,9 @@ body{
   transform:translate(-50%,0);
 }
 .site-nav-btn{
-  min-width:108px;
+  min-width:86px;
   height:38px;
-  padding:0 16px;
+  padding:0 14px;
   border:0;
   border-radius:999px;
   background:transparent;
@@ -1888,6 +1888,7 @@ body::after{
 </audio>
 
 <nav class="site-nav" id="site-nav" aria-label="Selecionar página">
+  <button class="site-nav-btn" type="button" data-page="page-intro">Início</button>
   <button class="site-nav-btn active" type="button" data-page="page-proposal-intro">Pedido</button>
   <button class="site-nav-btn" type="button" data-page="page-history">Nossa história</button>
 </nav>
@@ -2492,7 +2493,12 @@ function syncSiteNav(pageId){
   if(!siteNav) return;
   siteNav.classList.toggle('visible', pagesWithNav.includes(pageId));
   siteNavButtons.forEach(btn=>{
-    btn.classList.toggle('active', btn.dataset.page === pageId);
+    const target = btn.dataset.page;
+    if(target === 'page-proposal-intro' && (pageId === 'page-proposal-intro' || pageId === 'page-yes')){
+      btn.classList.add('active');
+    } else {
+      btn.classList.toggle('active', target === pageId);
+    }
   });
 }
 
