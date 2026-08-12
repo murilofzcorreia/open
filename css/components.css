@@ -647,3 +647,145 @@
   .music-vinyl { width: 66px; height: 66px; }
   .music-disc { width: 62px; height: 62px; }
 }
+
+/* ── LOVE QUIZ & BUCKET LIST ── */
+.love-quiz-section, .bucket-list-section {
+  width: 100%;
+  max-width: 680px;
+  margin: 36px auto 0;
+  padding: 24px;
+  background: rgba(13, 0, 32, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+.quiz-step {
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--pink);
+  margin-bottom: 8px;
+}
+
+.quiz-question {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  color: #fff;
+  margin-bottom: 18px;
+  line-height: 1.4;
+}
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.quiz-opt-btn {
+  padding: 14px 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--p5);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.82rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.quiz-opt-btn:hover, .quiz-opt-btn.selected {
+  background: linear-gradient(135deg, rgba(244, 114, 182, 0.25), rgba(168, 85, 247, 0.25));
+  border-color: var(--pink);
+  color: #fff;
+  transform: translateX(4px);
+}
+
+.quiz-feedback {
+  margin-top: 14px;
+  padding: 12px 16px;
+  background: rgba(168, 85, 247, 0.15);
+  border-radius: 12px;
+  color: var(--p5);
+  font-size: 0.82rem;
+}
+
+.quiz-result {
+  text-align: center;
+  padding: 20px 10px;
+}
+
+.quiz-badge {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--pink), var(--p4));
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.bucket-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.bucket-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.bucket-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.bucket-item.completed {
+  border-color: rgba(244, 114, 182, 0.4);
+  background: rgba(244, 114, 182, 0.1);
+}
+
+.bucket-icon {
+  font-size: 1.2rem;
+}
+
+.bucket-text {
+  font-size: 0.85rem;
+  color: var(--p5);
+  flex: 1;
+}
+
+.bucket-item.completed .bucket-text {
+  text-decoration: line-through;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.bucket-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: transparent;
+}
+
+.bucket-item.completed .bucket-check {
+  background: var(--pink);
+  border-color: var(--pink);
+  color: #fff;
+}
+

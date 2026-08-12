@@ -6,8 +6,11 @@ import { initRouter } from './modules/router.js';
 import { initEvasionModule } from './modules/evasion.js';
 import { initLightboxModule } from './modules/lightbox.js';
 import { initLetterModule } from './modules/letter.js';
+import { initPWA } from './modules/pwa.js';
+import { initInteractiveFeatures } from './modules/features.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+  initPWA();
   initWebGLShader();
   initCursorTrail();
   initFloatingEmojis();
@@ -16,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initEvasionModule();
   initLightboxModule();
   initLetterModule();
+  initInteractiveFeatures();
   initRouter();
 
   // Sort history gallery by data-date if present
@@ -26,3 +30,4 @@ document.addEventListener('DOMContentLoaded', () => {
       .forEach(card => gallery.appendChild(card));
   }
 });
+
