@@ -30,4 +30,3 @@ document.addEventListener('DOMContentLoaded', () => {
       .forEach(card => gallery.appendChild(card));
   }
 });
-

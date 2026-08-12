@@ -93,15 +93,21 @@ export function initWebGLShader() {
   const uMouse = gl.getUniformLocation(prog, 'u_mouse');
 
   let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+  let tiltX = 0, tiltY = 0;
   document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
   document.addEventListener('touchmove', e => {
     if (e.touches[0]) { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; }
   }, { passive: true });
+  window.addEventListener('deviceorientation', e => {
+    if (e.gamma === null || e.beta === null) return;
+    tiltX += (Math.max(-35, Math.min(35, e.gamma)) / 35 - tiltX) * 0.08;
+    tiltY += (Math.max(-35, Math.min(35, e.beta - 45)) / 35 - tiltY) * 0.08;
+  }, { passive: true });
 
+  let renderScale = Math.min(window.devicePixelRatio || 1, 1.5);
   function resize() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-    canvas.width  = Math.floor(window.innerWidth * dpr);
-    canvas.height = Math.floor(window.innerHeight * dpr);
+    canvas.width  = Math.floor(window.innerWidth * renderScale);
+    canvas.height = Math.floor(window.innerHeight * renderScale);
     gl.viewport(0, 0, canvas.width, canvas.height);
   }
   resize();
@@ -109,20 +115,36 @@ export function initWebGLShader() {
 
   let paused = false;
   let lastTime = 0;
+  let smoothFrameTime = 22;
+  let lastScaleAdjustment = 0;
   const targetInterval = 1000 / 45; // ~45 FPS cap saves CPU/GPU while maintaining fluid motion
 
   document.addEventListener('visibilitychange', () => {
     paused = document.hidden;
-    if (!paused) requestAnimationFrame(loop);
+    if (!paused) {
+      lastTime = performance.now();
+      requestAnimationFrame(loop);
+    }
   });
 
   function loop(t) {
     if (paused) return;
     if (t - lastTime >= targetInterval) {
+      const frameTime = t - lastTime;
+      smoothFrameTime += (frameTime - smoothFrameTime) * 0.08;
       lastTime = t;
+      if (t - lastScaleAdjustment > 2000) {
+        const deviceCap = Math.min(window.devicePixelRatio || 1, 1.5);
+        const nextScale = smoothFrameTime > 31 ? Math.max(0.8, renderScale - 0.15) : smoothFrameTime < 24 ? Math.min(deviceCap, renderScale + 0.1) : renderScale;
+        if (nextScale !== renderScale) {
+          renderScale = nextScale;
+          resize();
+        }
+        lastScaleAdjustment = t;
+      }
       gl.uniform2f(uRes, canvas.width, canvas.height);
       gl.uniform1f(uTime, t * 0.001);
-      gl.uniform2f(uMouse, mouseX, mouseY);
+      gl.uniform2f(uMouse, mouseX + tiltX * window.innerWidth * 0.18, mouseY + tiltY * window.innerHeight * 0.18);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     }
     requestAnimationFrame(loop);

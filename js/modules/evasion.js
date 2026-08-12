@@ -20,6 +20,7 @@ export function resetQuestionState() {
   }
   if (btnNo) {
     btnNo.style.display = '';
+    btnNo.textContent = 'Não…';
     btnNo.classList.remove('bye');
   }
 }
@@ -48,6 +49,21 @@ export function runAway() {
 
   if (noEsc >= MAX) return;
   noEsc++;
+
+  const phrases = [
+    "Não…",
+    "Tem certeza? 😜",
+    "Caminho errado! 💜",
+    "Tente com amor! ✨",
+    "Não dá pra fugir! 🥰",
+    "Opção inválida! 👑",
+    "Quebrando botão..."
+  ];
+
+  if (noEsc < MAX && phrases[noEsc]) {
+    btnNo.textContent = phrases[noEsc];
+    if (navigator.vibrate) navigator.vibrate(40);
+  }
 
   if (noEsc >= MAX) {
     const r = btnNo.getBoundingClientRect();
@@ -192,14 +208,4 @@ export function initEvasionModule() {
     });
   });
 
-  // Gyroscope parallax support
-  window.addEventListener('deviceorientation', e => {
-    if (e.gamma === null || e.beta === null) return;
-    const ax = Math.max(-30, Math.min(30, e.gamma)) / 30;
-    const ay = Math.max(-30, Math.min(30, e.beta - 45)) / 30;
-    const pages = document.querySelectorAll('.page.active');
-    pages.forEach(p => {
-      p.style.transform = `perspective(1000px) rotateY(${ax * 5}deg) rotateX(${-ay * 5}deg) translateZ(10px)`;
-    });
-  });
 }

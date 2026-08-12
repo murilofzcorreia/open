@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="Um espaço especial para celebrar o pedido de namoro e as memórias mais bonitas entre Murilo Fuzi Correia e Ana Paula Germano de Oliveira."/>
   <meta name="theme-color" content="#1a0038"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <meta property="og:title" content="Murilo &amp; Ana Paula — Nossa História 💜"/>
+  <meta property="og:description" content="Um espaço especial para guardar o pedido, as memórias e o tempo bonito que começou entre nós."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://murilo-ana.vercel.app/"/>
+  <meta property="og:image" content="https://murilo-ana.vercel.app/imagensParaADD/foto_1.jpeg"/>
+  <meta property="og:locale" content="pt_BR"/>
+  <meta name="twitter:card" content="summary_large_image"/>
   <title>Ana Paula Germano de Oliveira</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='50%25' y='54%25' text-anchor='middle' dominant-baseline='middle' font-size='52'%3E%F0%9F%92%9C%3C/text%3E%3C/svg%3E"/>
   <link rel="manifest" href="manifest.json"/>
@@ -213,6 +221,22 @@
       </p>
     </section>
 
+    <section class="daily-note" aria-labelledby="daily-note-title">
+      <p class="section-eyebrow">um carinho por dia</p>
+      <h3 id="daily-note-title">Motivo do dia</h3>
+      <p class="daily-note-copy" id="daily-note-copy" aria-live="polite">Abra quando quiser receber um lembrete do quanto você é especial para mim.</p>
+      <button class="daily-note-btn" id="daily-note-btn" type="button">Abrir o motivo de hoje</button>
+      <p class="daily-note-status" id="daily-note-status"></p>
+    </section>
+
+    <section class="time-capsule" aria-labelledby="time-capsule-title" data-unlock-date="2026-12-24T00:00:00-03:00">
+      <p class="section-eyebrow">para o futuro</p>
+      <h3 id="time-capsule-title">Cápsula do tempo</h3>
+      <p class="capsule-copy" id="capsule-copy">Uma surpresa guardada até a nossa primeira véspera de Natal juntos.</p>
+      <p class="capsule-countdown" id="capsule-countdown" aria-live="polite"></p>
+      <button class="capsule-btn" id="capsule-btn" type="button" disabled>Guardar para abrir no momento certo</button>
+    </section>
+
     <section>
       <div class="history-section-title">
         <p>galeria por data</p>
@@ -355,6 +379,12 @@
         <div class="photo-lightbox-image-wrap">
           <img id="photo-lightbox-image" class="photo-lightbox-image" src="" alt="" draggable="false"/>
         </div>
+        <div class="photo-lightbox-tools" aria-label="Interações da foto">
+          <button id="photo-lightbox-rotate" type="button">Girar</button>
+          <button id="photo-lightbox-like" type="button" aria-pressed="false">♡ Curtir</button>
+        </div>
+        <label class="photo-note-label" for="photo-lightbox-note">Uma anotação para esta lembrança</label>
+        <textarea id="photo-lightbox-note" class="photo-lightbox-note" rows="2" maxlength="180" placeholder="Escreva uma memória aqui..."></textarea>
       </div>
     </div>
   </div>

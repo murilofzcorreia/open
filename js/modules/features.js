@@ -1,6 +1,8 @@
 export function initInteractiveFeatures() {
   initLoveQuiz();
   initBucketList();
+  initDailyNote();
+  initTimeCapsule();
 }
 
 function initLoveQuiz() {
@@ -94,4 +96,77 @@ function initBucketList() {
       }
     });
   });
+}
+
+function initDailyNote() {
+  const button = document.getElementById('daily-note-btn');
+  const copy = document.getElementById('daily-note-copy');
+  const status = document.getElementById('daily-note-status');
+  if (!button || !copy || !status) return;
+
+  const messages = [
+    'O seu sorriso tem um jeito especial de transformar qualquer dia comum em um dia bonito. 💜',
+    'Com você, até os silêncios ficam leves, seguros e cheios de carinho.',
+    'Eu adoro a pessoa que sou quando estou ao seu lado: mais calmo, mais feliz e mais eu.',
+    'Você é uma das minhas partes favoritas de todos os planos para o futuro.',
+    'Obrigado por existir do seu jeitinho e por deixar meus dias mais coloridos. ✨',
+    'Meu lugar favorito sempre fica um pouco mais perto quando você está comigo.',
+    'Hoje, como todos os dias, eu escolho cuidar da nossa história com carinho.'
+  ];
+  const key = 'murilo-ana-daily-note';
+  const today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' });
+  const saved = localStorage.getItem(key);
+
+  if (saved === today) {
+    const message = messages[new Date(`${today}T12:00:00`).getDay()];
+    copy.textContent = message;
+    status.textContent = 'Este carinho fica guardado até amanhã.';
+    button.disabled = true;
+    button.textContent = 'Volte amanhã para outro motivo';
+  }
+
+  button.addEventListener('click', () => {
+    const message = messages[new Date(`${today}T12:00:00`).getDay()];
+    copy.textContent = message;
+    status.textContent = 'Um lembrete só nosso, liberado hoje.';
+    button.disabled = true;
+    button.textContent = 'Volte amanhã para outro motivo';
+    localStorage.setItem(key, today);
+    if (navigator.vibrate) navigator.vibrate(25);
+  });
+}
+
+function initTimeCapsule() {
+  const capsule = document.querySelector('.time-capsule');
+  const countdown = document.getElementById('capsule-countdown');
+  const copy = document.getElementById('capsule-copy');
+  const button = document.getElementById('capsule-btn');
+  if (!capsule || !countdown || !copy || !button) return;
+
+  const unlockDate = new Date(capsule.dataset.unlockDate);
+  if (Number.isNaN(unlockDate.getTime())) return;
+  let timer = null;
+
+  function update() {
+    const remaining = unlockDate.getTime() - Date.now();
+    if (remaining <= 0) {
+      clearInterval(timer);
+      countdown.textContent = 'A cápsula está pronta para ser aberta. 💌';
+      button.disabled = false;
+      button.textContent = 'Abrir a cápsula';
+      button.addEventListener('click', () => {
+        copy.textContent = 'Se você abriu isto, chegou um momento que eu sonhei guardar com você. Que a gente continue escolhendo um ao outro, com leveza, carinho e muitos novos capítulos.';
+        button.hidden = true;
+      }, { once: true });
+      return;
+    }
+    const totalHours = Math.floor(remaining / 3600000);
+    const days = Math.floor(totalHours / 24);
+    const hours = totalHours % 24;
+    const minutes = Math.floor((remaining % 3600000) / 60000);
+    countdown.textContent = `${days} dias, ${String(hours).padStart(2, '0')}h e ${String(minutes).padStart(2, '0')}min para abrir.`;
+  }
+
+  update();
+  timer = window.setInterval(update, 60000);
 }
