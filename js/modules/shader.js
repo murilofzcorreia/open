@@ -108,6 +108,9 @@ export function initWebGLShader() {
   window.addEventListener('resize', resize);
 
   let paused = false;
+  let lastTime = 0;
+  const targetInterval = 1000 / 45; // ~45 FPS cap saves CPU/GPU while maintaining fluid motion
+
   document.addEventListener('visibilitychange', () => {
     paused = document.hidden;
     if (!paused) requestAnimationFrame(loop);
@@ -115,10 +118,13 @@ export function initWebGLShader() {
 
   function loop(t) {
     if (paused) return;
-    gl.uniform2f(uRes, canvas.width, canvas.height);
-    gl.uniform1f(uTime, t * 0.001);
-    gl.uniform2f(uMouse, mouseX, mouseY);
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    if (t - lastTime >= targetInterval) {
+      lastTime = t;
+      gl.uniform2f(uRes, canvas.width, canvas.height);
+      gl.uniform1f(uTime, t * 0.001);
+      gl.uniform2f(uMouse, mouseX, mouseY);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    }
     requestAnimationFrame(loop);
   }
   requestAnimationFrame(loop);
