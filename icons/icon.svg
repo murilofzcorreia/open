@@ -6,7 +6,8 @@
     </linearGradient>
   </defs>
   <rect width="512" height="512" rx="112" fill="#120022"/>
-  <circle cx="256" cy="256" r="196" fill="url(#g)" opacity=".25"/>
-  <path fill="url(#g)" d="M256 405 113 272C31 195 78 82 171 102c37 8 67 34 85 65 18-31 48-57 85-65 93-20 140 93 58 170L256 405Z"/>
-  <path fill="#fff" opacity=".9" d="m179 237 49 47 105-108 18 18-123 126-67-65z"/>
+  <circle cx="256" cy="256" r="196" fill="url(#g)" opacity=".28"/>
+  <circle cx="256" cy="256" r="161" fill="#16002d" stroke="#d8b4fe" stroke-opacity=".36" stroke-width="3"/>
+  <text x="256" y="285" fill="#fff" font-family="Georgia, serif" font-size="122" font-weight="600" letter-spacing="-10" text-anchor="middle">M&amp;A</text>
+  <path d="M183 336c24-27 51-7 73 18 22-25 49-45 73-18 24 28-10 62-73 96-63-34-97-68-73-96Z" fill="url(#g)"/>
 </svg>

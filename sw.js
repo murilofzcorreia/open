@@ -1,6 +1,7 @@
 const CACHE_NAME = 'murilo-ana-v2';
 const APP_SHELL = [
   '/', '/index.html', '/manifest.json', '/robots.txt', '/icons/icon.svg',
+  '/icons/apple-touch-icon.png', '/icons/icon-192.png', '/icons/icon-512.png',
   '/css/main.css', '/css/pages.css', '/css/components.css', '/css/modals.css',
   '/js/main.js', '/js/modules/shader.js', '/js/modules/cursor.js',
   '/js/modules/particles.js', '/js/modules/music.js', '/js/modules/router.js',
