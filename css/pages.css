@@ -527,6 +527,12 @@
   gap: 12px;
 }
 
+.history-gallery .memory-card {
+  content-visibility: auto;
+  contain-intrinsic-size: 300px 360px;
+  will-change: transform, opacity;
+}
+
 /* Responsive Queries for Pages */
 @media (max-width: 640px) {
   .hub-names { margin-top: 18px; }
@@ -534,3 +540,13 @@
   #page-history { padding: 74px 16px 62px; }
   .history-gallery { grid-template-columns: 1fr; }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+

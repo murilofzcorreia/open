@@ -4,7 +4,13 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="Um espaço especial para celebrar o pedido de namoro e as memórias mais bonitas entre Murilo Fuzi Correia e Ana Paula Germano de Oliveira."/>
-  <meta name="theme-color" content="#1a0038"/>
+  <meta name="theme-color" content="#1a0038" media="(prefers-color-scheme: dark)"/>
+  <meta name="theme-color" content="#04000e"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Murilo &amp; Ana"/>
+  <meta name="application-name" content="Murilo &amp; Ana"/>
   <meta name="robots" content="noindex, nofollow"/>
   <meta property="og:title" content="Murilo &amp; Ana Paula — Nossa História 💜"/>
   <meta property="og:description" content="Um espaço especial para guardar o pedido, as memórias e o tempo bonito que começou entre nós."/>
@@ -29,7 +35,23 @@
 
 <canvas id="gl-canvas"></canvas>
 <canvas id="cfc"></canvas>
+<canvas id="audio-visualizer-canvas" class="audio-visualizer-canvas" aria-hidden="true"></canvas>
 <div id="trans-overlay"></div>
+
+<nav class="cosmic-theme-bar" id="cosmic-theme-bar" aria-label="Atmosfera Cósmica">
+  <button class="cosmic-theme-btn active" data-theme="nebula" type="button" aria-label="Atmosfera Nebula: Violeta &amp; Magenta" title="Nebula">
+    <span class="cosmic-theme-swatch swatch-nebula" aria-hidden="true"></span>
+    <span class="cosmic-theme-title">Nebula</span>
+  </button>
+  <button class="cosmic-theme-btn" data-theme="sunset" type="button" aria-label="Atmosfera Sunset: Âmbar Dourado &amp; Rosa" title="Sunset">
+    <span class="cosmic-theme-swatch swatch-sunset" aria-hidden="true"></span>
+    <span class="cosmic-theme-title">Sunset</span>
+  </button>
+  <button class="cosmic-theme-btn" data-theme="midnight" type="button" aria-label="Atmosfera Midnight: Safira &amp; Ciano Elétrico" title="Midnight">
+    <span class="cosmic-theme-swatch swatch-midnight" aria-hidden="true"></span>
+    <span class="cosmic-theme-title">Midnight</span>
+  </button>
+</nav>
 
 <button class="music-toggle" id="music-toggle" type="button" aria-label="Controlar trilha sonora">
   <span class="music-vinyl" aria-hidden="true">
@@ -222,6 +244,17 @@
       </p>
     </section>
 
+    <!-- ══════════════════════════════
+         SEÇÃO — MAPA DAS CONSTELAÇÕES DO AMOR
+    ══════════════════════════════ -->
+    <section class="constellation-section" aria-labelledby="constellation-title">
+      <div class="history-section-title">
+        <p>mapa estelar</p>
+        <h3 id="constellation-title">Constelação das Nossas Memórias</h3>
+      </div>
+      <div id="constellation-container" class="constellation-container"></div>
+    </section>
+
     <section class="daily-note" aria-labelledby="daily-note-title">
       <p class="section-eyebrow">um carinho por dia</p>
       <h3 id="daily-note-title">Motivo do dia</h3>
@@ -242,6 +275,9 @@
       <div class="history-section-title">
         <p>galeria por data</p>
         <h3>Memórias para completar</h3>
+        <div class="stories-launch-header">
+          <button class="hub-btn primary" id="btn-open-stories" type="button">🎞️ Assistir Memórias em Modo Cinema</button>
+        </div>
       </div>
       <div class="history-gallery" id="history-gallery">
         <article class="memory-card">
@@ -354,6 +390,31 @@
         </div>
       </div>
     </section>
+
+    <!-- ══════════════════════════════
+         SEÇÃO — CARTÃO POSTAL COMEMORATIVO
+    ══════════════════════════════ -->
+    <section class="postcard-export-section">
+      <div class="history-section-title">
+        <p>lembrança especial</p>
+        <h3>Cartão Postal do Nosso Amor</h3>
+      </div>
+      <div class="postcard-export-card">
+        <div class="postcard-preview-wrap">
+          <div class="postcard-mini-preview">
+            <span class="postcard-icon">📸</span>
+            <p class="postcard-title">Murilo &amp; Ana Paula</p>
+            <p class="postcard-date">12 de Maio de 2026</p>
+          </div>
+        </div>
+        <p class="postcard-copy">
+          Gere e baixe um cartão postal polaroid em alta resolução da nossa história para guardar para sempre com você! ✨💜
+        </p>
+        <button class="hub-btn primary" id="btn-export-memory" type="button">
+          ✨ Gerar &amp; Baixar Cartão de Memória
+        </button>
+      </div>
+    </section>
   </div>
 </div>
 
@@ -392,23 +453,123 @@
 </div>
 
 <template id="letter-modal-template">
-  <div class="letter-modal" id="letter-modal" aria-hidden="true">
+  <div class="letter-modal" id="letter-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Carta Secreta de Amor">
     <div class="letter-backdrop" id="letter-backdrop"></div>
-    <div class="letter-stage">
-      <button class="letter-close" id="close-letter" type="button" aria-label="Fechar carta">✕</button>
-      <div class="letter-envelope">
-        <div class="letter-banner">
-          <h3 class="letter-title">Carta secreta</h3>
-        </div>
-        <article class="letter-paper" id="letter-paper">
-          <div class="letter-paper-head">
-            <div class="letter-paper-head-copy">
-              <p class="letter-kicker">para você, meu amor</p>
-            </div>
-            <button class="letter-skip" id="letter-skip" type="button">Skip</button>
+    
+    <div class="letter-stage" id="letter-stage">
+      <button class="letter-close" id="close-letter" type="button" aria-label="Fechar carta">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <!-- 3D Origami Envelope Container -->
+      <div class="envelope-3d-scene" id="envelope-scene">
+        <div class="envelope-3d" id="envelope-3d">
+          
+          <!-- Soft Ambient 3D Shadow -->
+          <div class="envelope-shadow"></div>
+
+          <!-- Back Wall with Luxury Velvet Pattern -->
+          <div class="envelope-back">
+            <div class="envelope-pattern"></div>
           </div>
-          <div class="letter-body" id="letter-body"></div>
-        </article>
+
+          <!-- The Love Letter Paper (tucked inside, slides out in 3D) -->
+          <article class="letter-paper" id="letter-paper">
+            <div class="letter-paper-inner">
+              <div class="letter-paper-decor-top">
+                <span class="letter-ornament">✦</span>
+                <span class="letter-ornament-line"></span>
+                <span class="letter-stamp-mini">M 💜 A</span>
+                <span class="letter-ornament-line"></span>
+                <span class="letter-ornament">✦</span>
+              </div>
+
+              <div class="letter-paper-head">
+                <div class="letter-paper-head-copy">
+                  <span class="letter-kicker">Para Minha Princesa</span>
+                  <h3 class="letter-recipient">Ana Paula Germano de Oliveira</h3>
+                </div>
+                <div class="letter-controls">
+                  <button class="letter-sound-toggle" id="letter-sound-toggle" type="button" aria-label="Alternar som das teclas" title="Alternar som">
+                    <span class="sound-icon sound-icon-on" id="sound-icon-on">🔔</span>
+                    <span class="sound-icon sound-icon-off" id="sound-icon-off" style="display:none;">🔕</span>
+                  </button>
+                  <button class="letter-skip" id="letter-skip" type="button" aria-label="Pular digitação">
+                    <span>Pular</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                      <polygon points="5 4 15 12 5 20 5 4"></polygon>
+                      <line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="3"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="letter-body-wrapper">
+                <div class="letter-body" id="letter-body"></div>
+              </div>
+
+              <div class="letter-paper-footer">
+                <div class="letter-signature">
+                  <p class="letter-sig-text">Com todo o meu amor e carinho,</p>
+                  <p class="letter-sig-name">Murilo Fuzi Correia</p>
+                </div>
+                <div class="letter-seal-watermark">
+                  <span>M 💜 A</span>
+                </div>
+              </div>
+
+              <div class="letter-action-bar" id="letter-action-bar">
+                <button class="letter-replay-btn" id="letter-replay-btn" type="button">
+                  <span>✨ Ler novamente</span>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Front Pocket Origami Folds (Left, Right, Bottom) -->
+          <div class="envelope-pocket">
+            <div class="envelope-fold fold-left"></div>
+            <div class="envelope-fold fold-right"></div>
+            <div class="envelope-fold fold-bottom">
+              <div class="envelope-bottom-glow"></div>
+            </div>
+          </div>
+
+          <!-- Top Folding Flap (3D Origami Flip Animation) -->
+          <div class="envelope-flap" id="envelope-flap">
+            <div class="flap-front">
+              <div class="flap-crease"></div>
+            </div>
+            <div class="flap-back">
+              <div class="flap-lining"></div>
+            </div>
+          </div>
+
+          <!-- Wax Seal positioned at apex of top flap -->
+          <div class="wax-seal-container" id="wax-seal-container">
+            <button class="wax-seal" id="wax-seal" type="button" aria-label="Romper selo de cera e abrir carta de amor" role="button">
+              <div class="seal-glow-ring"></div>
+              <div class="seal-wax-base">
+                <div class="seal-wax-rim"></div>
+                <div class="seal-wax-center">
+                  <span class="seal-monogram">M <span class="seal-heart">💜</span> A</span>
+                </div>
+                <div class="seal-wax-sheen"></div>
+              </div>
+              <div class="seal-hint">
+                <span class="seal-hint-icon">👆</span>
+                <span class="seal-hint-text">Toque para romper o selo</span>
+              </div>
+            </button>
+          </div>
+
+          <!-- Canvas for Particle Physics Shatter Explosion -->
+          <canvas class="wax-particle-canvas" id="wax-particle-canvas"></canvas>
+
+        </div>
       </div>
     </div>
   </div>

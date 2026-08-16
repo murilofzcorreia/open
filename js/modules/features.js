@@ -1,8 +1,11 @@
+import { downloadMemoryCard } from './exporter.js';
+
 export function initInteractiveFeatures() {
   initLoveQuiz();
   initBucketList();
   initDailyNote();
   initTimeCapsule();
+  initPostcardExport();
 }
 
 function initLoveQuiz() {
@@ -170,3 +173,27 @@ function initTimeCapsule() {
   update();
   timer = window.setInterval(update, 60000);
 }
+
+function initPostcardExport() {
+  const btn = document.getElementById('btn-export-memory');
+  if (!btn) return;
+
+  btn.addEventListener('click', async () => {
+    const originalText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = '✨ Criando cartão de memórias...';
+
+    // Pick first photo from gallery or fallback
+    const firstImg = document.querySelector('.memory-photo img') || document.querySelector('.gallery .g-card img');
+    const photoSrc = firstImg ? (firstImg.currentSrc || firstImg.src) : '/imagensParaADD/foto_1.jpeg';
+
+    const success = await downloadMemoryCard(photoSrc, 'Cada segundo ao seu lado é uma memória inesquecível.');
+
+    btn.textContent = success ? '💜 Cartão baixado com sucesso!' : 'Tentar novamente';
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.textContent = originalText;
+    }, 3500);
+  });
+}
+

@@ -9,6 +9,36 @@
   --pink2:#ec4899;
   --gold:#f5c842;
   --w:#ffffff;
+  --music-beat-scale: 1;
+  --music-energy: 0;
+  --cosmic-glow: rgba(168, 85, 247, 0.4);
+  --cosmic-accent: #f472b6;
+}
+
+:root[data-cosmic-theme="sunset"] {
+  --bg: #0d0208;
+  --p1: #200510;
+  --p2: #380a1c;
+  --p3: #b45309;
+  --p4: #f59e0b;
+  --p5: #fde68a;
+  --pink: #fb7185;
+  --pink2: #f43f5e;
+  --cosmic-glow: rgba(245, 158, 11, 0.4);
+  --cosmic-accent: #f43f5e;
+}
+
+:root[data-cosmic-theme="midnight"] {
+  --bg: #010410;
+  --p1: #030d24;
+  --p2: #071942;
+  --p3: #0284c7;
+  --p4: #38bdf8;
+  --p5: #bae6fd;
+  --pink: #22d3ee;
+  --pink2: #06b6d4;
+  --cosmic-glow: rgba(6, 182, 212, 0.4);
+  --cosmic-accent: #38bdf8;
 }
 
 *, *::before, *::after {
@@ -42,6 +72,18 @@ body {
   z-index: 0;
 }
 
+/* ── AUDIO REACTIVE VISUALIZER CANVAS ── */
+#audio-visualizer-canvas {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 140px;
+  pointer-events: none;
+  z-index: 5;
+  mix-blend-mode: screen;
+}
+
 /* ── CURSOR TRAIL (GPU Composited) ── */
 .cursor-dot {
   position: fixed;
@@ -56,6 +98,172 @@ body {
   box-shadow: 0 0 10px var(--p4), 0 0 20px var(--pink);
   mix-blend-mode: screen;
   will-change: transform;
+}
+
+/* ── FLOATING GLASSMORPHIC COSMIC THEME SWITCHER BAR ── */
+.cosmic-theme-bar {
+  position: fixed;
+  bottom: 18px;
+  left: 18px;
+  z-index: 640;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 6px;
+  border-radius: 999px;
+  background: rgba(12, 6, 24, 0.72);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 14px 34px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  user-select: none;
+  touch-action: manipulation;
+  animation: fadeIn 0.8s ease 0.6s both;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.cosmic-theme-bar:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.cosmic-theme-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(216, 180, 254, 0.72);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  outline: none;
+  transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cosmic-theme-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.cosmic-theme-btn:focus-visible {
+  border-color: var(--pink);
+  box-shadow: 0 0 0 2px rgba(244, 114, 182, 0.35);
+}
+
+.cosmic-theme-btn.active {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow:
+    0 4px 14px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  font-weight: 600;
+}
+
+.cosmic-theme-btn[data-theme="nebula"].active {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(244, 114, 182, 0.24));
+  border-color: rgba(244, 114, 182, 0.45);
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.cosmic-theme-btn[data-theme="sunset"].active {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.3), rgba(244, 63, 94, 0.24));
+  border-color: rgba(245, 158, 11, 0.5);
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.cosmic-theme-btn[data-theme="midnight"].active {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.3), rgba(6, 182, 212, 0.24));
+  border-color: rgba(6, 182, 212, 0.5);
+  box-shadow: 0 0 14px rgba(6, 182, 212, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.cosmic-theme-swatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.28s ease;
+}
+
+.swatch-nebula {
+  background: linear-gradient(135deg, #a855f7, #f472b6);
+  box-shadow: 0 0 6px rgba(244, 114, 182, 0.65);
+}
+
+.swatch-sunset {
+  background: linear-gradient(135deg, #f59e0b, #f43f5e);
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.7);
+}
+
+.swatch-midnight {
+  background: linear-gradient(135deg, #0284c7, #06b6d4);
+  box-shadow: 0 0 6px rgba(6, 182, 212, 0.7);
+}
+
+.cosmic-theme-btn.active .cosmic-theme-swatch {
+  transform: scale(1.25);
+}
+
+.cosmic-theme-btn[data-theme="nebula"].active .cosmic-theme-swatch {
+  box-shadow: 0 0 10px rgba(244, 114, 182, 0.95);
+}
+
+.cosmic-theme-btn[data-theme="sunset"].active .cosmic-theme-swatch {
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.95);
+}
+
+.cosmic-theme-btn[data-theme="midnight"].active .cosmic-theme-swatch {
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.95);
+}
+
+.cosmic-theme-title {
+  display: inline-block;
+}
+
+/* Responsive mobile floating dock */
+@media (max-width: 600px) {
+  .cosmic-theme-bar {
+    bottom: 14px;
+    left: 12px;
+    gap: 3px;
+    padding: 4px 5px;
+  }
+  .cosmic-theme-btn {
+    height: 28px;
+    padding: 0 8px;
+    gap: 5px;
+    font-size: 0.54rem;
+    letter-spacing: 0.8px;
+  }
+  .cosmic-theme-swatch {
+    width: 7px;
+    height: 7px;
+  }
+}
+
+@media (max-width: 380px) {
+  .cosmic-theme-btn {
+    padding: 0 6px;
+    font-size: 0.5rem;
+    letter-spacing: 0.5px;
+  }
 }
 
 /* ── PAGES ── */

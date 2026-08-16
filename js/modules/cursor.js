@@ -1,28 +1,62 @@
+/**
+ * cursor.js — Smooth Spring Cursor Trail (Fine Pointers Only)
+ * Automatically skips mobile touchscreens to eliminate unnecessary DOM mutations and CPU overhead.
+ */
+
 export function initCursorTrail() {
-  const N = 18;
+  // Mobile CPU Shield: Disable trail on touch-only devices
+  const isFinePointer = window.matchMedia('(pointer: fine)').matches;
+  if (!isFinePointer) return;
+
+  const N = 14;
   const dots = [];
+  const fragment = document.createDocumentFragment();
+
   for (let i = 0; i < N; i++) {
     const d = document.createElement('div');
     d.className = 'cursor-dot';
-    d.style.cssText = `width:${6-i*0.2}px;height:${6-i*0.2}px;opacity:${1-i/N};transition-duration:${(i+1)*0.04}s;z-index:${9999-i};`;
-    document.body.appendChild(d);
-    dots.push({ el: d, x: 0, y: 0 });
+    d.style.cssText = `position:fixed;top:0;left:0;pointer-events:none;border-radius:50%;background:rgba(216,180,254,${1 - i / N});width:${6 - i * 0.25}px;height:${6 - i * 0.25}px;z-index:${9999 - i};will-change:transform;`;
+    fragment.appendChild(d);
+    dots.push({ el: d, x: window.innerWidth / 2, y: window.innerHeight / 2 });
   }
+  document.body.appendChild(fragment);
 
-  let mx = 0, my = 0;
-  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-  document.addEventListener('touchmove', e => {
-    if (e.touches[0]) { mx = e.touches[0].clientX; my = e.touches[0].clientY; }
+  let mx = window.innerWidth / 2;
+  let my = window.innerHeight / 2;
+  let isRunning = true;
+  let rafId = null;
+
+  document.addEventListener('mousemove', (e) => {
+    mx = e.clientX;
+    my = e.clientY;
   }, { passive: true });
 
   function animTrail() {
-    dots.forEach((d, i) => {
-      const prev = i === 0 ? { x: mx, y: my } : dots[i - 1];
-      d.x += (prev.x - d.x) * (0.35 - i * 0.012);
-      d.y += (prev.y - d.y) * (0.35 - i * 0.012);
-      d.el.style.transform = `translate3d(${d.x}px,${d.y}px,0) translate(-50%,-50%)`;
-    });
-    requestAnimationFrame(animTrail);
+    if (!isRunning) return;
+
+    for (let i = 0; i < N; i++) {
+      const d = dots[i];
+      const prevX = i === 0 ? mx : dots[i - 1].x;
+      const prevY = i === 0 ? my : dots[i - 1].y;
+
+      d.x += (prevX - d.x) * (0.38 - i * 0.015);
+      d.y += (prevY - d.y) * (0.38 - i * 0.015);
+
+      d.el.style.transform = `translate3d(${d.x}px, ${d.y}px, 0) translate(-50%, -50%)`;
+    }
+
+    rafId = requestAnimationFrame(animTrail);
   }
-  animTrail();
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      isRunning = false;
+      if (rafId) cancelAnimationFrame(rafId);
+    } else {
+      isRunning = true;
+      rafId = requestAnimationFrame(animTrail);
+    }
+  });
+
+  rafId = requestAnimationFrame(animTrail);
 }
